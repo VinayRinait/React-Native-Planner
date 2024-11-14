@@ -1,19 +1,28 @@
-import { Provider } from "react-redux";
-import FlashMessage from "react-native-flash-message";
-import { Platform, StatusBar, View } from "react-native";
-import { PersistGate } from "redux-persist/integration/react";
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-
-import InternetCheck from "@components/InternetCheck/InternetCheck";
-import { persistor, store } from "@store/store";
-import { COLORS } from "@constants/globalStyles";
-import Router from "./router/Router";
+import {Provider} from 'react-redux';
+import FlashMessage from 'react-native-flash-message';
+import {Platform, StatusBar, View} from 'react-native';
+import {PersistGate} from 'redux-persist/integration/react';
+import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
+import InternetCheck from '@components/InternetCheck/InternetCheck';
+import {persistor, store} from '@store/store';
+import {COLORS} from '@constants/globalStyles';
+import Router from './router/Router';
+import {useEffect} from 'react';
+import notificationService from '@services/notification.service';
 
 export default function App() {
+  useEffect(() => {
+    const requestNotificationPermissions = async () => {
+      await notificationService.requestPermissions();
+      await notificationService.initialize();
+    };
+    requestNotificationPermissions();
+  }, []);
+
   const Application = () => (
-    <GestureHandlerRootView style={{ flex: 1 }}>
+    <GestureHandlerRootView style={{flex: 1}}>
       <InternetCheck>
         <BottomSheetModalProvider>
           <Provider store={store}>
@@ -27,23 +36,25 @@ export default function App() {
     </GestureHandlerRootView>
   );
 
-  if (Platform.OS == "ios") {
-
+  if (Platform.OS == 'ios') {
     return (
-      <View style={{
-        backgroundColor: COLORS.primaryViolent,
-        height: 100,
-        flex: 1
-      }}>
-        <SafeAreaView style={{ flex: 1 }}>
+      <View
+        style={{
+          backgroundColor: COLORS.primaryViolent,
+          height: 100,
+          flex: 1,
+        }}>
+        <SafeAreaView style={{flex: 1}}>
           <Application />
         </SafeAreaView>
-      </View>);
+      </View>
+    );
   } else {
     StatusBar.setBackgroundColor(COLORS.primaryViolent, true);
     return (
       <SafeAreaProvider>
         <Application />
-      </SafeAreaProvider>);
+      </SafeAreaProvider>
+    );
   }
 }

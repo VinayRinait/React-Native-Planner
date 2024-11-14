@@ -1,4 +1,4 @@
-import { Alert } from "react-native";
+import {Alert} from 'react-native';
 
 interface AlertButton {
   text: string;
@@ -14,11 +14,11 @@ interface ConfirmationAlertProps {
 }
 
 export const showConfirmAlert = ({
-                                 title,
-                                 message,
-                                 okHandler,
-                                 cancelHandler,
-                               }: ConfirmationAlertProps): void => {
+  title,
+  message,
+  okHandler,
+  cancelHandler,
+}: ConfirmationAlertProps): void => {
   const buttons: AlertButton[] = [
     {
       text: 'Cancel',
@@ -39,5 +39,5 @@ export const showConfirmAlert = ({
     },
   ];
 
-  Alert.alert(title, message, buttons, { cancelable: false });
+  Alert.alert(title, message, buttons, {cancelable: false});
 };

@@ -1,14 +1,14 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
-import { TaskModel } from "@models/task.model";
+import {TaskModel} from '@models/task.model';
 import {
   deleteTaskByIdAsync,
   editTaskAsync,
-  getTaskByIdAsync, getTaskCountForUserAsync,
-  getTaskListWithParamsAsync
-} from "./thunks";
-import { FilterType } from "../../../types/filterType";
-
+  getTaskByIdAsync,
+  getTaskCountForUserAsync,
+  getTaskListWithParamsAsync,
+} from './thunks';
+import {FilterType} from '../../../types/filterType';
 
 interface TaskState {
   tasks: TaskModel[];
@@ -27,15 +27,14 @@ const initialState: TaskState = {
   hasNextPage: true,
   countOfTasks: 0,
   lastVisible: null,
-  filter: "Active"
+  filter: 'Active',
 };
 
-
 const taskSlice = createSlice({
-  name: "tasks",
+  name: 'tasks',
   initialState,
   reducers: {
-    resetTaskState: (state) => {
+    resetTaskState: state => {
       state.tasks = initialState.tasks;
       state.error = initialState.error;
       state.lastVisible = initialState.lastVisible;
@@ -43,11 +42,11 @@ const taskSlice = createSlice({
     },
     setFilter: (state, action: PayloadAction<FilterType>) => {
       state.filter = action.payload;
-    }
+    },
   },
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     builder
-      .addCase(getTaskByIdAsync.pending, (state) => {
+      .addCase(getTaskByIdAsync.pending, state => {
         state.loading = true;
       })
       .addCase(getTaskByIdAsync.fulfilled, (state, action) => {
@@ -57,48 +56,50 @@ const taskSlice = createSlice({
       .addCase(editTaskAsync.fulfilled, (state, action) => {
         const updatedTask = action.payload;
 
-        const updatedTaskIndex = state.tasks.findIndex(task => task.id === updatedTask?.id);
+        const updatedTaskIndex = state.tasks.findIndex(
+          task => task.id === updatedTask?.id,
+        );
 
         if (updatedTaskIndex !== -1) {
-          state.tasks[updatedTaskIndex] = updatedTask;
+          state.tasks[updatedTaskIndex] = updatedTask!;
         }
       })
       .addCase(getTaskByIdAsync.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       })
-      .addCase(getTaskListWithParamsAsync.pending, (state) => {
+      .addCase(getTaskListWithParamsAsync.pending, state => {
         state.loading = true;
       })
       .addCase(getTaskListWithParamsAsync.fulfilled, (state, action) => {
         state.loading = false;
         state.tasks = state.tasks.concat(action.payload.tasks);
-        state.lastVisible = action.payload.tasks[action.payload.tasks.length - 1]?.created_at || null;
+        state.lastVisible =
+          action.payload?.tasks[action.payload.tasks.length - 1]?.created_at ||
+          null;
         state.hasNextPage = action.payload.hasNextPage;
       })
       .addCase(getTaskListWithParamsAsync.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       })
-      .addCase(deleteTaskByIdAsync.pending, (state) => {
+      .addCase(deleteTaskByIdAsync.pending, state => {
         state.loading = true;
       })
       .addCase(deleteTaskByIdAsync.fulfilled, (state, action) => {
         state.loading = false;
-        state.tasks = state.tasks.filter((task) => task.id !== action.payload);
+        state.tasks = state.tasks.filter(task => task.id !== action.payload);
       })
       .addCase(deleteTaskByIdAsync.rejected, (state, action) => {
-        state.error = action.error.message || "Something went wrong";
+        state.error = action.error.message || 'Something went wrong';
       })
       .addCase(getTaskCountForUserAsync.fulfilled, (state, action) => {
         state.loading = false;
         state.countOfTasks = action.payload;
       });
-  }
+  },
 });
 
-export const { resetTaskState, setFilter } = taskSlice.actions;
+export const {resetTaskState, setFilter} = taskSlice.actions;
 
 export default taskSlice.reducer;
-
-

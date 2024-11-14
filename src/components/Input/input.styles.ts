@@ -1,12 +1,13 @@
-import { StyleSheet } from "react-native";
-import { BORDER_RADIUS, COLORS, FONT_SIZE, FONTS } from "@constants/globalStyles";
-
+import {StyleSheet} from 'react-native';
+import {BORDER_RADIUS, COLORS, FONT_SIZE, FONTS} from '@constants/globalStyles';
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    marginBottom: 15,
+  },
   label: {
-    color: "rgba(255, 255, 255, 0.50)",
-    marginBottom: 2
+    color: 'rgba(255, 255, 255, 0.50)',
+    marginBottom: 5,
   },
   input: {
     color: COLORS.textTitleText,
@@ -23,9 +24,9 @@ const styles = StyleSheet.create({
   },
   textStyle: {
     fontFamily: FONTS.sansProRegular,
-    fontWeight: "400",
-    fontSize: 16
-  }
+    fontWeight: '400',
+    fontSize: 16,
+  },
 });
 
 export default styles;

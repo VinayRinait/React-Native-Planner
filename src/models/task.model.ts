@@ -1,11 +1,11 @@
-import { LocationType } from "../types/taskTypes";
-import { TaskPriorityTypes } from "@constants/TasksPriorityColor";
+import {LocationType} from '../types/taskTypes';
+import {TaskPriorityTypes} from '@constants/TasksPriorityColor';
 
 export interface TaskModel {
   created_at: number;
   completed_at: number | null;
+  due_date: number | null;
   image_url: string;
-  location: LocationType | null;
   title: string;
   done: boolean;
   type: TaskPriorityTypes;
